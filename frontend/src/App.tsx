@@ -1,11 +1,20 @@
+import { useState } from 'react'
 import './App.css'
-import { ProfileChip } from './components/ProfileChip'
+import { useSocket } from './context/SocketProvider';
 
 function App() {
 
+  const [message, setMessage] = useState('');
+  const { sendMessage } = useSocket();
+
   return (
     <div className="" >
-      <ProfileChip name='Kisteria' avatar='https://github.com/shadcn.png' status='Typing...'  />
+
+      <input placeholder='enter message' onChange={e => setMessage(e.target.value)} />
+      <button onClick={() => {
+        sendMessage(message);
+      }}>Send</button>
+
     </div> 
   )
 }

@@ -2,7 +2,7 @@
   "name": "backend",
   "module": "src/index.ts",
   "type": "module",
-  "script": {
+  "scripts": {
     "dev": "bun run src/index.ts"
   },
   "devDependencies": {
@@ -12,8 +12,6 @@
     "typescript": "^5.0.0"
   },
   "dependencies": {
-    "drizzle-kit": "^0.24.0",
-    "drizzle-orm": "^0.33.0",
-    "postgres": "^3.4.4"
+    "socket.io": "^4.7.5"
   }
 }
