@@ -15,6 +15,13 @@
       "when": 1723716625281,
       "tag": "0001_skinny_titanium_man",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1723731735751,
+      "tag": "0002_foamy_wildside",
+      "breakpoints": true
     }
   ]
 }

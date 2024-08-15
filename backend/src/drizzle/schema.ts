@@ -9,6 +9,21 @@ export const usersTable = pgTable('users_table', {
   password: text('password').notNull()
 });
 
+export const chatTable = pgTable('chat_table', {
+  id: uuid('id').defaultRandom().primaryKey(),
+  fromUsername: text('from_username')
+    .notNull()
+    .references(() => usersTable.username),
+  toUsername: text('to_username')
+    .notNull()
+    .references(() => usersTable.username),
+  content: text('content').notNull(),
+  createdAt: timestamp('created_at').defaultNow(),
+});
+
+export type InsertChat = typeof chatTable.$inferInsert;
+export type SelectChat = typeof chatTable.$inferSelect;
+
 export type InsertUser = typeof usersTable.$inferInsert;
 export type SelectUser = typeof usersTable.$inferSelect;
 

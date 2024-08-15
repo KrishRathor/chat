@@ -41,8 +41,7 @@ userRouter.post('/signup', async (req: Request, res: Response) => {
 
   try {
     const user = await db.select().from(usersTable).where(eq(usersTable.email, email));
-
-    if (user) {
+    if (user.length > 0) {
       return res.json({
         code: 200,
         message: 'User already exists',
@@ -72,10 +71,10 @@ userRouter.post('/signup', async (req: Request, res: Response) => {
 
 const credentialsSchema = z.object({
   email: z.string().email('Invalid email address'),
-  password: z.string().min(6, 'Password must be at least 6 characters long'),
+  password: z.string().min(4, 'Password must be at least 4 characters long'),
 });
 
-userRouter.get('/signin', async (req: Request, res: Response) => {
+userRouter.post('/signin', async (req: Request, res: Response) => {
 
   const result = credentialsSchema.safeParse(req.body);
 
@@ -88,6 +87,7 @@ userRouter.get('/signin', async (req: Request, res: Response) => {
   }
 
   const { email, password } = result.data;
+
 
   try {
 
@@ -121,7 +121,10 @@ userRouter.get('/signin', async (req: Request, res: Response) => {
     return res.json({
       code: 200,
       message: 'signin successful',
-      body: token
+      body: {
+        token,
+        username: user[0].username
+      }
     })
 
   } catch (error) {

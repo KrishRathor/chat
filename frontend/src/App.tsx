@@ -1,21 +1,20 @@
-import { useState } from 'react'
+import { useRecoilValue } from 'recoil'
 import './App.css'
-import { useSocket } from './context/SocketProvider';
+import { Sidebar } from './components/Sidebar'
+import { selectedUserState } from './atoms/selectedUser'
+import { ChatSection } from './components/ChatSection';
 
 function App() {
 
-  const [message, setMessage] = useState('');
-  const { sendMessage } = useSocket();
+  const selectedUser = useRecoilValue(selectedUserState);
 
   return (
-    <div className="" >
-
-      <input placeholder='enter message' onChange={e => setMessage(e.target.value)} />
-      <button onClick={() => {
-        sendMessage(message);
-      }}>Send</button>
-
-    </div> 
+    <div className="flex w-full" >
+      <div className='w-fit' ><Sidebar /></div>
+      {
+        selectedUser && <div className='w-full' ><ChatSection /></div>
+      }
+    </div>
   )
 }
 
