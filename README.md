@@ -28,3 +28,26 @@ A real-time chat application built to demonstrate modern web development practic
     ```bash
     cp frontend/src/example.backendurl.ts frontend/src/backendurl.ts
 
+4. Start frontend
+    ```bash
+    cd frontend
+    bun install
+    bun run dev
+
+   This will start frontend at port 5173
+
+5. Start Http Backend
+    ```bash
+    cd backend
+    bun install
+    bun run dev
+
+   This will start backend at port 5000
+
+6. Start Socket Server
+     ```bash
+    cd socket
+    bun install
+    bun run dev
+
+   This will start socket server at port 8000
