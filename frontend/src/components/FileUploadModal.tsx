@@ -53,8 +53,7 @@ export const FileUploadModal: React.FC<IFileUploadModal> = (props) => {
       })
     })
 
-    const res = await req.json();
-    console.log(res);
+    await req.json();
     setfetch(prev => !prev);
     closeModal();
 

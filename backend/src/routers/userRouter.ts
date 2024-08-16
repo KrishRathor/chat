@@ -88,8 +88,6 @@ userRouter.post('/signin', async (req: Request, res: Response) => {
 
   const { email, password } = result.data;
 
-  console.log(email, password, 'jre');
-
   try {
 
     const user = await db.select().from(usersTable).where(eq(usersTable.email, email));

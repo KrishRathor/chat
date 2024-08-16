@@ -53,7 +53,6 @@ export const ChatSection: React.FC = () => {
         })
       })
       const res = await req.json();
-      console.log(res.body);
       setPastMessages(res.body);
     }
     getmsg();

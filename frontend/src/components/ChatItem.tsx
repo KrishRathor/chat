@@ -17,10 +17,8 @@ export const ChatItem: React.FC<IChatItem> = (props) => {
   const [isRead, setIsRead] = useState<boolean>(false);
 
   useEffect(() => {
-    console.log(read);
     const fromusername = localStorage.getItem('username');
     if (!fromusername) return;
-    console.log('read', read);
     read.map(r => {
       const u1 = r[0];
       const u2 = r[1];

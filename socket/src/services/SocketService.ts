@@ -43,14 +43,12 @@ class SocketService {
       })
 
       socket.on("event:typing", data => {
-        console.log(data);
         const { from, to } = JSON.parse(data);
         const toSocketId = users[to];
         io.to(toSocketId).emit("event:typing:reply", JSON.stringify({ from, to }));
       })
 
       socket.on("event:message:read", data => {
-        console.log('d', data);
         const {from, to} = JSON.parse(data);
         io.emit("event:message:read:reply", JSON.stringify({from, to}));
       })

@@ -16,7 +16,6 @@ export const Signup: React.FC = () => {
 
   const handleLogin = async (e: any) => {
     e.preventDefault();
-    console.log('here');
     const req = await fetch('http://localhost:5000/api/v1/users/signin', {
       method: 'POST',
       headers: {

@@ -27,7 +27,6 @@ export const ProfileChip: React.FC<IProfileChip> = (props) => {
     })
     if (!req.ok) return;
     const res = await req.json();
-    console.log(res);
     const body = res.body;
     body.map((b: any) => {
       if (b.toUsername === toUsername) {
@@ -47,42 +46,41 @@ export const ProfileChip: React.FC<IProfileChip> = (props) => {
     getStatus();
   }, [toUsername]);
 
-  const handleArchive = async () => {
-    if (!isArchive) {
-      console.log('came here');
-      const req = await fetch('http://localhost:5000/api/v1/status/changeStatus', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-          fromUsername: localStorage.getItem('username'),
-          toUsername,
-          status: 'Archive'
-        })
-      })
-      if (!req.ok) return;
-      const res = await req.json();
-      console.log(res);
-      getStatus();
-    } else {
-      const req = await fetch('http://localhost:5000/api/v1/status/changeStatus', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-          fromUsername: localStorage.getItem('username'),
-          toUsername,
-          status: 'UnArchive'
-        })
-      })
-      if (!req.ok) return;
-      const res = await req.json();
-      console.log(res);
-      getStatus();
-    }
-  }
+  // const handleArchive = async () => {
+  //   if (!isArchive) {
+  //     const req = await fetch('http://localhost:5000/api/v1/status/changeStatus', {
+  //       method: 'POST',
+  //       headers: {
+  //         'Content-Type': 'application/json'
+  //       },
+  //       body: JSON.stringify({
+  //         fromUsername: localStorage.getItem('username'),
+  //         toUsername,
+  //         status: 'Archive'
+  //       })
+  //     })
+  //     if (!req.ok) return;
+  //     const res = await req.json();
+  //     console.log(res);
+  //     getStatus();
+  //   } else {
+  //     const req = await fetch('http://localhost:5000/api/v1/status/changeStatus', {
+  //       method: 'POST',
+  //       headers: {
+  //         'Content-Type': 'application/json'
+  //       },
+  //       body: JSON.stringify({
+  //         fromUsername: localStorage.getItem('username'),
+  //         toUsername,
+  //         status: 'UnArchive'
+  //       })
+  //     })
+  //     if (!req.ok) return;
+  //     const res = await req.json();
+  //     console.log(res);
+  //     getStatus();
+  //   }
+  // }
 
   return (
     <div className={`flex items-center w-full h-[10vh] bg-[#F6F6F6] `} >

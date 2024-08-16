@@ -26,7 +26,6 @@ export const SideListItem: React.FC<ISideListItem> = (props) => {
     })
     if (!req.ok) return '';
     const res = await req.json();
-    console.log('ds', res.body[res.body.length-1]);
     const lastmsg = res.body[res.body.length-1].content;
     if (!lastmsg) return;
     setMsg(lastmsg);

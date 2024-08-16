@@ -14,7 +14,6 @@ const changeStatusSchema = z.object({
 });
 
 statusRouter.post('/changeStatus', async (req: Request, res: Response) => {
-  console.log('came here');
   const result = changeStatusSchema.safeParse(req.body);
 
   if (!result.success) {

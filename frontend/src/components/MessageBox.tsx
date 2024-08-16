@@ -28,8 +28,7 @@ export const MessageBox: React.FC = () => {
         toUsername: selectedChat
       })
     })
-    const res = await req.json();
-    console.log(res);
+    await req.json();
     setMessage("")
   };
 

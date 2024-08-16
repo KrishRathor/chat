@@ -59,7 +59,6 @@ export const SocketProvider: React.FC<ISocketProvider> = ({ children }) => {
 
   const sendReadSignal: ISocketContext["sendReadSignal"] = useCallback(
     (from: string, to: string) => {
-      console.log('h', from, to);
       socket?.emit("event:message:read", JSON.stringify({ from, to }));
     },
     [socket]
@@ -67,13 +66,11 @@ export const SocketProvider: React.FC<ISocketProvider> = ({ children }) => {
 
   const onMessageReply = useCallback((data: any) => {
     const { msg, fromEmail, toEmail } = JSON.parse(data);
-    console.log(msg, fromEmail, toEmail);
     setMessages((prev) => [...prev, { msg, fromEmail, toEmail }]);
   }, []);
 
 
   const getUserList = useCallback((data: any) => {
-    console.log(Object.keys(data));
     setUsers(Object.keys(data));
   }, []);
 
@@ -91,10 +88,6 @@ export const SocketProvider: React.FC<ISocketProvider> = ({ children }) => {
     const { from, to } = JSON.parse(data);
     setRead(prev => [...prev, [from, to]]);
   }, [])
-
-  useEffect(() => {
-    console.log('re', read);
-  }, [read])
 
   useEffect(() => {
 
