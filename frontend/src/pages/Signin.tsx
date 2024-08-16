@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { BACKEND_URL } from "../backendurl";
 
 export const Signin: React.FC = () => {
 
@@ -15,7 +16,7 @@ export const Signin: React.FC = () => {
 
   const handleLogin = async (e: any) => {
     e.preventDefault();
-    const req = await fetch('http://localhost:5000/api/v1/users/signin', {
+    const req = await fetch(`${BACKEND_URL}/api/v1/users/signin`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'

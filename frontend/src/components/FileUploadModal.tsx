@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { useRecoilValue, useSetRecoilState } from "recoil";
 import { selectedUserState } from "../atoms/selectedUser";
 import { fetchMessage } from "../atoms/fetchMessage";
+import { BACKEND_URL } from "../backendurl";
 
 interface IFileUploadModal {
   isOpen: boolean,
@@ -23,7 +24,7 @@ export const FileUploadModal: React.FC<IFileUploadModal> = (props) => {
     const fromUsername = localStorage.getItem('username');
     if (!fromUsername) return;
 
-    const request = await fetch('http://localhost:5000/api/v1/aws/getPresignedUrl');
+    const request = await fetch(`${BACKEND_URL}/api/v1/aws/getPresignedUrl`);
     const { url, fields, link } = await request.json();
 
     const formData = new FormData();
@@ -41,7 +42,7 @@ export const FileUploadModal: React.FC<IFileUploadModal> = (props) => {
       body: formData
     })
 
-    const req = await fetch('http://localhost:5000/api/v1/aws/saveToDb', {
+    const req = await fetch(`${BACKEND_URL}/api/v1/aws/saveToDb`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'

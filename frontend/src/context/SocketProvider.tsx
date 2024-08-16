@@ -2,6 +2,7 @@ import React, { useCallback, useContext, useEffect, useState } from "react";
 import { useRecoilValue } from "recoil";
 import { io, Socket } from "socket.io-client";
 import { selectedUserState } from "../atoms/selectedUser";
+import { SOCKET_URL } from "../backendurl";
 
 interface ISocketProvider {
   children?: React.ReactNode
@@ -91,7 +92,7 @@ export const SocketProvider: React.FC<ISocketProvider> = ({ children }) => {
 
   useEffect(() => {
 
-    const _socket = io('http://localhost:8000', {
+    const _socket = io(`${SOCKET_URL}`, {
       query: {
         userToken: localStorage.getItem('username')
       }

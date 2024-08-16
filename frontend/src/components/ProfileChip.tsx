@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useSocket } from "../context/SocketProvider";
 import { useRecoilValue } from "recoil";
 import { selectedUserState } from "../atoms/selectedUser";
+import { BACKEND_URL } from "../backendurl";
 
 interface IProfileChip {
   name: string,
@@ -16,7 +17,7 @@ export const ProfileChip: React.FC<IProfileChip> = (props) => {
   const [isArchive, setIsArchive] = useState<boolean>(false);
 
   const getStatus = async () => {
-    const req = await fetch('http://localhost:5000/api/v1/status/getStatus', {
+    const req = await fetch(`${BACKEND_URL}/api/v1/status/getStatus`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'

@@ -3,6 +3,7 @@ import { useSocket } from "../context/SocketProvider";
 import { useRecoilValue } from "recoil";
 import { selectedUserState } from "../atoms/selectedUser";
 import { FileUploadModal } from "./FileUploadModal";
+import { BACKEND_URL } from "../backendurl";
 
 export const MessageBox: React.FC = () => {
 
@@ -17,7 +18,7 @@ export const MessageBox: React.FC = () => {
     if (!username) return;
     sendMessage(message, username, selectedChat);
 
-    const req = await fetch('http://localhost:5000/api/v1/chat/sendMessage', {
+    const req = await fetch(`${BACKEND_URL}/api/v1/chat/sendMessage`, {
       method: 'POST',
       headers: {
         "Content-Type": "application/json",

@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { BACKEND_URL } from "../backendurl";
 
 interface ISideListItem {
   avatar: string,
@@ -14,7 +15,7 @@ export const SideListItem: React.FC<ISideListItem> = (props) => {
   const [msg, setMsg] = useState<string>('');
 
   const getLastMessage = async () => {
-    const req = await fetch('http://localhost:5000/api/v1/chat/getMsgBetweenUser', {
+    const req = await fetch(`${BACKEND_URL}/api/v1/chat/getMsgBetweenUser`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

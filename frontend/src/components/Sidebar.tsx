@@ -6,13 +6,14 @@ import { useRecoilState } from "recoil";
 import { selectedChipState } from "../atoms/selectedChip";
 import { selectedUserState } from "../atoms/selectedUser";
 import { allUsersState } from "../atoms/allUser";
+import { BACKEND_URL } from "../backendurl";
 
 export const Sidebar: React.FC = () => {
 
   const [users, setUsers] = useRecoilState(allUsersState);
 
   const getAllUsers = async () => {
-    const req = await fetch('http://localhost:5000/api/v1/users/getAllUsers');
+    const req = await fetch(`${BACKEND_URL}/api/v1/users/getAllUsers`);
     if (!req.ok) {
       return;
     }

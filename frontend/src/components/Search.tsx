@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useRecoilState } from "recoil";
 import { allUsersState } from "../atoms/allUser";
+import { BACKEND_URL } from "../backendurl";
 
 export const Search: React.FC = () => {
 
@@ -8,7 +9,7 @@ export const Search: React.FC = () => {
   const [searchValue, setSearchValue] = useState("");
 
   const getAllUsers = async () => {
-    const req = await fetch('http://localhost:5000/api/v1/users/getAllUsers');
+    const req = await fetch(`${BACKEND_URL}/api/v1/users/getAllUsers`);
     if (!req.ok) {
       return;
     }

@@ -6,6 +6,7 @@ import { MessageBox } from "./MessageBox";
 import { useSocket } from "../context/SocketProvider";
 import { ChatItem } from "./ChatItem";
 import { fetchMessage } from "../atoms/fetchMessage";
+import { BACKEND_URL } from "../backendurl";
 
 interface IMessages {
   id: string;
@@ -42,7 +43,7 @@ export const ChatSection: React.FC = () => {
 
   useEffect(() => {
     const getmsg = async () => {
-      const req = await fetch('http://localhost:5000/api/v1/chat/getMsgBetweenUser', {
+      const req = await fetch(`${BACKEND_URL}/api/v1/chat/getMsgBetweenUser`, {
         method: 'POST',
         headers: {
           "Content-Type": "application/json",
