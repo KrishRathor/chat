@@ -11,6 +11,8 @@ A real-time chat application built to demonstrate modern web development practic
 - **CDN**: CloudFront
 - **Deployment**: AWS EC2
 - **Reverse Proxy**: Nginx
+- **ORM**: Drizzle
+- **Database**: Postgres
 
 ## Setup
 
@@ -25,3 +27,4 @@ A real-time chat application built to demonstrate modern web development practic
 3. Create backendurl file:
     ```bash
     cp frontend/src/example.backendurl.ts frontend/src/backendurl.ts
+
