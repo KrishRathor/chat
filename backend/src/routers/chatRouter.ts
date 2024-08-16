@@ -1,7 +1,7 @@
 import { Router, type Request, type Response } from "express";
 import { z } from "zod";
 import { db } from "../drizzle/db";
-import { chatTable } from "../drizzle/schema";
+import { chatTable, fileTable } from "../drizzle/schema";
 import { and, eq } from "drizzle-orm";
 
 const chatRouter = Router();
@@ -82,7 +82,21 @@ chatRouter.post('/getMsgBetweenUser', async (req: Request, res: Response) => {
       )
     );
 
-    const mergedMessages = [...getMsg1, ...getMsg2];
+    const getFiles1 = await db.select().from(fileTable).where(
+      and(
+        eq(fileTable.fromUsername, fromUsername),
+        eq(fileTable.toUsername, toUsername)
+      )
+    )
+
+    const getFiles2 = await db.select().from(fileTable).where(
+      and(
+        eq(fileTable.fromUsername, toUsername),
+        eq(fileTable.toUsername, fromUsername)
+      )
+    )
+
+    const mergedMessages = [...getMsg1, ...getMsg2, ...getFiles1, ...getFiles2];
 
     const getMsg = mergedMessages.sort((a, b) =>
       // @ts-ignore

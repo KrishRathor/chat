@@ -1,23 +1,15 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { Search } from "./Search";
 import { SideListItem } from "./SidelistItem";
 import { Chip } from "./Chip";
 import { useRecoilState } from "recoil";
 import { selectedChipState } from "../atoms/selectedChip";
 import { selectedUserState } from "../atoms/selectedUser";
-
-interface IUser {
-  id: string;
-  createdAt: string;
-  username: string;
-  email: string;
-  avatar: string | null;
-  password: string;
-}
+import { allUsersState } from "../atoms/allUser";
 
 export const Sidebar: React.FC = () => {
 
-  const [users, setUsers] = useState<IUser[]>([]);
+  const [users, setUsers] = useRecoilState(allUsersState);
 
   const getAllUsers = async () => {
     const req = await fetch('http://localhost:5000/api/v1/users/getAllUsers');
@@ -41,6 +33,7 @@ export const Sidebar: React.FC = () => {
     setSelectedChip(text);
   };
 
+
   return (
     <div className='ml-2' >
 
@@ -49,7 +42,7 @@ export const Sidebar: React.FC = () => {
       </div>
 
       <div className='flex mt-2'>
-        {['All', 'Archived', 'Unread', 'Block'].map((chipText) => (
+        {['All', 'Archived', 'Unread'].map((chipText) => (
           <div
             key={chipText}
             className='mx-2 cursor-pointer'
@@ -62,17 +55,21 @@ export const Sidebar: React.FC = () => {
 
       <div className='mt-2' >
         {
-          users.map((user, index) => (
-            <div key={index} onClick={() => setSelectedUser(user.username)} className='cursor-pointer mt-1 overflow-y-auto border border-gray-300 rounded-md' >
-              <SideListItem
-                name={user.username}
-                avatar={user.avatar ?? "https://github.com/shadcn.png"}
-                lastChatDate={'1 day'}
-                text='some text will come soon here'
-                isSelected={selectedUser === user.username}
-              />
-            </div>
-          ))
+          selectedChip === "All" && users.map((user, index) => {
+            if (!(user.username === localStorage.getItem('username'))) {
+              return (
+                <div key={index} onClick={() => setSelectedUser(user.username)} className='cursor-pointer mt-1 overflow-y-auto border border-gray-300 rounded-md' >
+                  <SideListItem
+                    name={user.username}
+                    avatar={user.avatar ?? "https://github.com/shadcn.png"}
+                    lastChatDate={'1 day'}
+                    text={''}
+                    isSelected={selectedUser === user.username}
+                  />
+                </div>
+              )
+            }
+          })
         }
       </div>
     </div>

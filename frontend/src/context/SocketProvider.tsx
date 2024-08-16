@@ -1,5 +1,7 @@
 import React, { useCallback, useContext, useEffect, useState } from "react";
+import { useRecoilValue } from "recoil";
 import { io, Socket } from "socket.io-client";
+import { selectedUserState } from "../atoms/selectedUser";
 
 interface ISocketProvider {
   children?: React.ReactNode
@@ -8,9 +10,11 @@ interface ISocketProvider {
 interface ISocketContext {
   sendMessage: (msg: string, fromEmail: string, toEmail: string) => any;
   sendTypingSignal: (from: string, to: string) => void;
+  sendReadSignal: (from: string, to: string) => void;
   messages: IMessages[];
   users: string[];
-  isTyping: boolean
+  isTyping: boolean;
+  read: [string, string][]
 }
 
 const SocketContext = React.createContext<ISocketContext | null>(null);
@@ -33,6 +37,7 @@ export const SocketProvider: React.FC<ISocketProvider> = ({ children }) => {
   const [users, setUsers] = useState<string[]>([]);
   const [messages, setMessages] = useState<IMessages[]>([]);
   const [isTyping, setIsTyping] = useState<boolean>(false);
+  const [read, setRead] = useState<[string, string][]>([]);
 
   const sendMessage: ISocketContext["sendMessage"] = useCallback(
     (msg: string, fromEmail: string, toEmail: string) => {
@@ -48,6 +53,14 @@ export const SocketProvider: React.FC<ISocketProvider> = ({ children }) => {
   const sendTypingSignal: ISocketContext["sendTypingSignal"] = useCallback(
     (from: string, to: string) => {
       socket?.emit("event:typing", JSON.stringify({ from, to }))
+    },
+    [socket]
+  )
+
+  const sendReadSignal: ISocketContext["sendReadSignal"] = useCallback(
+    (from: string, to: string) => {
+      console.log('h', from, to);
+      socket?.emit("event:message:read", JSON.stringify({ from, to }));
     },
     [socket]
   )
@@ -74,6 +87,15 @@ export const SocketProvider: React.FC<ISocketProvider> = ({ children }) => {
     }, 1000)
   }, [])
 
+  const onMessageReadReply = useCallback((data: any) => {
+    const { from, to } = JSON.parse(data);
+    setRead(prev => [...prev, [from, to]]);
+  }, [])
+
+  useEffect(() => {
+    console.log('re', read);
+  }, [read])
+
   useEffect(() => {
 
     const _socket = io('http://localhost:8000', {
@@ -85,6 +107,7 @@ export const SocketProvider: React.FC<ISocketProvider> = ({ children }) => {
     _socket.on("userList", getUserList);
     _socket.on("event:message:reply", onMessageReply);
     _socket.on("event:typing:reply", onTypingReply);
+    _socket.on("event:message:read:reply", onMessageReadReply);
 
     setSocket(_socket);
 
@@ -93,6 +116,7 @@ export const SocketProvider: React.FC<ISocketProvider> = ({ children }) => {
       _socket.off("userList", getUserList);
       _socket.off("event:message:reply", onMessageReply);
       _socket.off("event:typing:reply", onTypingReply);
+      _socket.off("event:message:read:reply", onMessageReadReply)
 
       _socket.disconnect();
       setSocket(undefined);
@@ -106,7 +130,9 @@ export const SocketProvider: React.FC<ISocketProvider> = ({ children }) => {
       messages,
       users,
       sendTypingSignal,
-      isTyping
+      isTyping,
+      sendReadSignal,
+      read
     }} >
       {children}
     </SocketContext.Provider>

@@ -1,9 +1,148 @@
 {
-  "id": "945097b1-9579-4e0a-9645-9c841e2f2956",
+  "id": "15875c55-5ffc-47e0-8669-3b5602688503",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "7",
   "dialect": "postgresql",
   "tables": {
+    "public.chat_table": {
+      "name": "chat_table",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true,
+          "default": "gen_random_uuid()"
+        },
+        "from_username": {
+          "name": "from_username",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "to_username": {
+          "name": "to_username",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "content": {
+          "name": "content",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "now()"
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "chat_table_from_username_users_table_name_fk": {
+          "name": "chat_table_from_username_users_table_name_fk",
+          "tableFrom": "chat_table",
+          "tableTo": "users_table",
+          "columnsFrom": [
+            "from_username"
+          ],
+          "columnsTo": [
+            "name"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "chat_table_to_username_users_table_name_fk": {
+          "name": "chat_table_to_username_users_table_name_fk",
+          "tableFrom": "chat_table",
+          "tableTo": "users_table",
+          "columnsFrom": [
+            "to_username"
+          ],
+          "columnsTo": [
+            "name"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {}
+    },
+    "public.file_table": {
+      "name": "file_table",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true,
+          "default": "gen_random_uuid()"
+        },
+        "from_username": {
+          "name": "from_username",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "to_username": {
+          "name": "to_username",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "link": {
+          "name": "link",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "''"
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "now()"
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "file_table_from_username_users_table_name_fk": {
+          "name": "file_table_from_username_users_table_name_fk",
+          "tableFrom": "file_table",
+          "tableTo": "users_table",
+          "columnsFrom": [
+            "from_username"
+          ],
+          "columnsTo": [
+            "name"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "file_table_to_username_users_table_name_fk": {
+          "name": "file_table_to_username_users_table_name_fk",
+          "tableFrom": "file_table",
+          "tableTo": "users_table",
+          "columnsFrom": [
+            "to_username"
+          ],
+          "columnsTo": [
+            "name"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {}
+    },
     "public.users_table": {
       "name": "users_table",
       "schema": "",
@@ -39,6 +178,12 @@
           "type": "text",
           "primaryKey": false,
           "notNull": false
+        },
+        "password": {
+          "name": "password",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
         }
       },
       "indexes": {},

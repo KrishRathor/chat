@@ -1,21 +1,20 @@
-import { useRecoilValue } from 'recoil'
 import './App.css'
-import { Sidebar } from './components/Sidebar'
-import { selectedUserState } from './atoms/selectedUser'
-import { ChatSection } from './components/ChatSection';
+import { BrowserRouter, Route, Routes } from 'react-router-dom';
+import { ChatPage } from './pages/ChatPage';
+import { Signin } from './pages/Signin';
+import { Signup } from './pages/Signup';
 
 function App() {
-
-  const selectedUser = useRecoilValue(selectedUserState);
-
   return (
-    <div className="flex w-full" >
-      <div className='w-fit' ><Sidebar /></div>
-      {
-        selectedUser && <div className='w-full' ><ChatSection /></div>
-      }
-    </div>
+    <BrowserRouter>
+      <Routes>
+        <Route path='/' element={<ChatPage />} />
+        <Route path='/signin' element={<Signin />} />
+        <Route path='/signup' element={<Signup />} />
+      </Routes>
+    </BrowserRouter>
   )
+
 }
 
 export default App

@@ -1,16 +1,18 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { ProfileChip } from "./ProfileChip";
 import { useRecoilValue } from "recoil";
 import { selectedUserState } from "../atoms/selectedUser";
 import { MessageBox } from "./MessageBox";
 import { useSocket } from "../context/SocketProvider";
 import { ChatItem } from "./ChatItem";
+import { fetchMessage } from "../atoms/fetchMessage";
 
 interface IMessages {
   id: string;
   fromUsername: string;
   toUsername: string;
-  content: string;
+  content?: string;
+  link?: string
   createdAt: string;
 }
 
@@ -20,13 +22,7 @@ export const ChatSection: React.FC = () => {
   const { messages, users, isTyping } = useSocket();
   const [status, setStatus] = useState<string>('');
   const [pastMessages, setPastMessages] = useState<IMessages[]>([]);
-  // const [currentChat, setCurrentChat] = useState<IMessages[]>([]);
 
-  useEffect(() => {
-    // const currentchatmsg = messages.filter(message => message.toEmail === username);
-    console.log(messages);
-    //setCurrentChat(currentchatmsg);
-  }, [messages])
 
   const getStatus = () => {
     let status = "offline";
@@ -42,10 +38,9 @@ export const ChatSection: React.FC = () => {
     setStatus(getStatus());
   }, [users, isTyping])
 
+  const fetchmsg = useRecoilValue(fetchMessage);
+
   useEffect(() => {
-
-    console.log(username, localStorage.getItem('username'));
-
     const getmsg = async () => {
       const req = await fetch('http://localhost:5000/api/v1/chat/getMsgBetweenUser', {
         method: 'POST',
@@ -62,6 +57,47 @@ export const ChatSection: React.FC = () => {
       setPastMessages(res.body);
     }
     getmsg();
+  }, [username, fetchmsg]);
+
+  const calculateTime = (timestamp: string) => {
+    const now: Date = new Date();
+    const past: Date = new Date(timestamp);
+
+    // @ts-ignore
+    const diffInMilliseconds = Math.abs(now - past);
+    const diffInMinutes = diffInMilliseconds / (1000 * 60);
+    const diffInHours = diffInMinutes / 60;
+    const diffInDays = diffInHours / 24;
+
+    if (diffInMinutes < 60) {
+      return `${Math.floor(diffInMinutes)} minutes ago`;
+    } else if (diffInHours < 24) {
+      return `${Math.floor(diffInHours)} hours ago`;
+    } else {
+      return `${Math.floor(diffInDays)} days ago`;
+    }
+  }
+
+  const chatContainerRef = useRef<HTMLDivElement | null>(null);
+
+  useEffect(() => {
+    if (chatContainerRef.current) {
+      chatContainerRef.current.scrollTop = chatContainerRef.current.scrollHeight;
+    }
+  }, [messages]);
+
+  useEffect(() => {
+    if (chatContainerRef.current) {
+      chatContainerRef.current.scrollTop = chatContainerRef.current.scrollHeight;
+    }
+  }, []);
+
+  const { sendReadSignal } = useSocket();
+
+  useEffect(() => {
+    const u = localStorage.getItem('username');
+    if (!u) return;
+    sendReadSignal(u, username);
   }, [username]);
 
   return (
@@ -70,14 +106,22 @@ export const ChatSection: React.FC = () => {
         <ProfileChip name={username} avatar="https://github.com/shadcn.png" status={status} />
       </div>
 
-      <div className="overflow-y-auto bg-red-50 h-[83vh]" >
+      <div ref={chatContainerRef} className="overflow-y-auto bg-red-50 h-[83vh]" >
         {
           pastMessages.map((msg, index) => {
-            return (
-              <div key={index} >
-                <ChatItem text={msg.content} isUser={msg.fromUsername === localStorage.getItem('username')} timeStamp="1 day" />
-              </div>
-            )
+            if (msg.content) {
+              return (
+                <div key={index} >
+                  <ChatItem text={msg.content} isUser={msg.fromUsername === localStorage.getItem('username')} timeStamp={calculateTime(msg.createdAt)} />
+                </div>
+              )
+            } else if (msg.link) {
+              return (
+                <div key={index} className={`${msg.fromUsername === localStorage.getItem('username') && 'flex'}`} >
+                  <img className={`${msg.fromUsername === localStorage.getItem('username') && 'ml-auto mr-2 flex'} rounded-md m-2 w-[15vw] h-[20vh]`} src={msg.link} alt="image" />
+                </div>
+              )
+            }
           })
         }
         {
